@@ -46,7 +46,7 @@ class HandlerAllText(Handler):
                 self.keyboards.remove_menu()
                 base.c_down(self.bot, message, self.p.count_down)
                 self.p.s_time = time.time()
-                self.p.last_timer_id = self.bot.send_message(message.chat.id, time.time() - self.p.s_time).message_id
+                self.p.last_timer_id = self.bot.send_message(message.chat.id, str(self.p.count_time) + " сек.").message_id
                 self.p.n1, self.p.n2 = base.make_sample(self.p.count_limit)
                 self.p.eq_id = self.bot.send_message(message.chat.id, f'{self.p.n1} + {self.p.n2}').message_id
                 self.p.equating = True
@@ -56,18 +56,25 @@ class HandlerAllText(Handler):
                     self.p.equating = False
                     self.bot.delete_message(message.chat.id, self.p.last_timer_id)
                     self.bot.send_message(message.chat.id, 'Баста, карапузики...время вышло')
-                    self.bot.send_message(message.chat.id, f'Зацени!\nПравильно: {self.p.correct}\nНеправильно: {self.p.incorrect} ')
+                    self.bot.send_message(message.chat.id, f'Зацени!\nПравильно: {self.p.correct}\n'
+                                                           f'Неправильно: {self.p.incorrect}',
+                                          parse_mode="HTML",
+                                          disable_web_page_preview=True,
+                                          reply_markup=self.keyboards.restart_menu())
                     self.p.last_timer_id = None
                     self.p.correct, self.p.incorrect = 0, 0
                 else:
                     if self.p.last_timer_id:
-                        self.bot.edit_message_text(round(time.time() - self.p.s_time), message.chat.id, self.p.last_timer_id)
+                        self.bot.edit_message_text(self.p.count_time - round(time.time() - self.p.s_time),
+                                                   message.chat.id, self.p.last_timer_id)
             if self.p.eq_id and message.text != config.KEYBOARD['START']:
                 t, r = base.answer_check(self.p.n1, self.p.n2, message.text)
                 self.bot.delete_message(message.chat.id, self.p.eq_id)
                 self.bot.send_message(message.chat.id, t)
                 self.bot.delete_message(message.chat.id, self.p.last_timer_id)
-                self.p.last_timer_id = self.bot.send_message(message.chat.id, round(time.time() - self.p.s_time)).message_id
+                self.p.last_timer_id = self.bot.send_message(message.chat.id,
+                                                             str(self.p.count_time - round(time.time() - self.p.s_time))
+                                                             + " сек.").message_id
                 self.p.n1, self.p.n2 = base.make_sample(self.p.count_limit)
                 self.p.eq_id = self.bot.send_message(message.chat.id, f'{self.p.n1} + {self.p.n2}').message_id
                 if r:

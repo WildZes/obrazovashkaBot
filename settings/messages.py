@@ -7,7 +7,7 @@ settings = """
 -<b>({}) - </b><i>Будешь решать примеры</i>
 -<b>({}) - </b><i>Тоже будешь решать, но после настроек</i>
 -<b>({}) - </b><i>Выбирай время и предел для примеров</i>
--<b>({}) - </b><i>Уже понял, чё это?</i>
+-<b>({}) - </b><i>Это помогатор</i>
 
 <i>Ни о чём:</i>
 -<b>версия программы: </b><i>{}</i>
@@ -16,7 +16,7 @@ settings = """
 
 """.format(
     emojize(':nut_and_bolt:'),
-    emojize('❌'),
+    emojize(':racing_car:'),
     emojize(':megaphone:'),
     emojize(':magnifying_glass_tilted_right:'),
     VERSION,

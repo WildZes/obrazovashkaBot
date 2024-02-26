@@ -1,2 +1,0 @@
-class MalformedExpressionException(ArithmeticError):
-    pass

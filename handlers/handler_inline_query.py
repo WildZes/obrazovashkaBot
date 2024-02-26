@@ -1,6 +1,5 @@
 from handlers.handler import Handler
 from telebot.types import CallbackQuery
-from settings.param import Param as p
 import base
 import time
 
@@ -18,11 +17,11 @@ class HandlerInlineQuery(Handler):
             # code = call.data
             if 'TIME' in call.data:
                 self.bot.delete_message(call.message.chat.id, call.message.id)
-                self.bot.send_message(call.message.chat.id, "СкоКА минут?",
+                self.bot.send_message(call.message.chat.id, "Время на решения",
                                       reply_markup=self.keyboards.min_choice())
             if 'LIMIT' in call.data:
                 self.bot.delete_message(call.message.chat.id, call.message.id)
-                self.bot.send_message(call.message.chat.id, "Застолби предел",
+                self.bot.send_message(call.message.chat.id, "Выбери предел",
                                       reply_markup=self.keyboards.lim_choice())
             if '60' in call.data or '180' in call.data or '300' in call.data:
                 self.bot.delete_message(call.message.chat.id, call.message.id)
@@ -31,7 +30,7 @@ class HandlerInlineQuery(Handler):
                                       parse_mode="HTML",
                                       disable_web_page_preview=True,
                                       reply_markup=self.keyboards.settings_menu())
-            if call.data in ['100', '200', '500', '1000']:
+            if call.data in ['10', '100', '200', '500', '1000']:
                 self.bot.delete_message(call.message.chat.id, call.message.id)
                 self.p.count_limit = (int(call.data))
                 self.bot.send_message(call.message.chat.id, 'Выбор сделан. Продолжишь?',
@@ -41,7 +40,8 @@ class HandlerInlineQuery(Handler):
             if 'START' in call.data:
                 base.c_down(self.bot, call.message, self.p.count_down)
                 self.p.s_time = time.time()
-                self.p.last_timer_id = self.bot.send_message(call.message.chat.id, time.time() - self.p.s_time).message_id
+                self.p.last_timer_id = self.bot.send_message(call.message.chat.id,
+                                                             str(self.p.count_time) + " сек").message_id
                 self.p.n1, self.p.n2 = base.make_sample(self.p.count_limit)
                 self.p.eq_id = self.bot.send_message(call.message.chat.id, f'{self.p.n1} + {self.p.n2}').message_id
                 self.p.equating = True
